@@ -95,7 +95,24 @@
          background-color: #f8f8f8;
       }
 
-      .backto-top > div {
+      .backto-top-left > div {
+         position: fixed;
+         bottom: 50px;
+         left: 30px;
+         cursor: pointer;
+         z-index: 999;
+         width: 50px;
+         height: 50px;
+         line-height: 46px;
+         border-radius: 50%;
+         /*background-color: #212428;*/
+         background-color: #fffffff;
+         text-align: center;
+         z-index: 999 !important;
+         box-shadow: var(--shadow-1);
+      }
+
+      .backto-top-right > div {
          position: fixed;
          bottom: 50px;
          right: 30px;
