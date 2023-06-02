@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'pagesController@home')->name('home.page');
+Route::get('/rochman/index', 'pagesController@indexPages')->name('index.pages');
 
 Route::get('/{main}', 'pagesController@mainpage')->name('main.page');
 Route::get('/{parent}/{url}', 'pagesController@childpage')->name('child.page');

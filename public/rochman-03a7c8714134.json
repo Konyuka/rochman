@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "rochman",
+  "private_key_id": "03a7c8714134c73d602df32c162a77984ca6c6bd",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDIIqHAaFdMgh+V\n8sli3ztTBnnt3RekEUBy0F1v9jsD452MEW+lakGOuHBaWEhKwCzLbPe8/Bv1Luf2\ng6rJ7PO/AwHuVCEjhhVFI1L6sq+iMF3piTsUrpMXQ6/56+olLzNUNhVHNRYbMiI8\n3ou3xNxJg8u87xDrXfWHpQlGnd2eMODzFonoTIWc2WLvk/N8fwXst61/KYmo/kJs\nSXXkodxZtig4lltZjExR+0pQiZkgfI92vKAzuh3KMJsquERVyv8an8SXSZBoF6Wi\nupR52DeA1AnvjBgOiXuzbdxNj5c7W1gpjZZbxxuQLlduwM9eimtWaZ8C0XiLXxhy\nHA22jQnHAgMBAAECggEABXPyxn11kZhR5jHX+VFwFex1v8/QXpWWrqXkqILbWHLQ\nocv+n1GJMrx2WVjigClLjQUaWBp7l1N+aq2NhHzfhHzqDoVqoEOXFTzuHn6ZQ5n9\n1IZ7HFC3GTI1CEiR0YYlvS2+26wfYOeVJsN8lrrsf1dYQIVrZVy4P4Qw7s8gqHPt\n5PUXID8e9CAzek+fWEKijdJHij62f4SlF/9GdifHFTJcjzCZ2HJkQl1QHUAsQbVz\nH+h5C0067wlUBjTMNjOj3TaMcULw/8hu0Duo47SItGrYJ2/L3riPUM+wepMXIvA8\nLywKJh17SOuxwnLto1GzL4GqKOQnw5TVZspDVf7elQKBgQD4dATg8iLv4glRlg5E\n/Rbx4//5/Xb63VSb4cZe9jAWe6sxclSgSwJWHwFdmRY+mi4e/jc0x/J3nisPG6LE\nBjYKXkqamYlXPGzXUS7Eq70OyTOjlZ153tx4lxD7itORu2bPpYcClsf2ocnyaZWN\nfRFK9sDagWxNG3RP5z4mmFCGLQKBgQDONuQTnb3Zhp1fdDs5MWJ3PsHWhJwcJ77g\na/Dz1LbNnhrE7Ze4vKlpIf3HjTnqR+XmuILChRLKvqhYbEThmq8jviHquN2XJgrr\nWuqmdV0XhTFXuJg0hwUdfByeJLhm/CN5FWywfM6oX8O8dT6+I6aFOLV7+R0WLiLa\nB56vGyEcQwKBgDMnB94cXC8RVaPThiqUBQZWT9xzX+y0ZvgVGtdwTmRCn/N1O5Ep\nAFkk1w4jN5459ibxZgJa7EPOb8UThoZfVP77fNapp8orKamHEF7zkOAbcqNKaXqu\n9KtrRtbTNU36zGcSCGLzEkZn9wEO1fikeEv706bpIJgbf+33iSc/Es0dAoGAF2Qu\nlvMLuAMHEu7SUPiDHNenkTfVpXP0uOxFlsMIQWavzqrMzQ3Jgb1zVhF1AlhJgdRo\nMLx7lzftTKprXdP4DevhWQjDSgPstSnI+DzT5HkdUcAEs+Ck+eU8McwkhroPJAsE\nGzjtEDhcsaHzDgppNy9plrh5TizJk0XOADrplJUCgYARC2/hUyv9JN4zgXhUjiUS\nWhUGhXdFMOBEfcSw9g59W5ScVguYciYo6CzK41jropAM+uKzDlDMQ5oAi+UePEl/\nqpe6MHEFXl7BCKaaIFrMiyPIkIsLuUejHspnFm5JYQMwsMfN70iHy+CzIP/Vowt5\ngHvrPNprLQGXx7qytZbpRA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "rochmanindex@rochman.iam.gserviceaccount.com",
+  "client_id": "107149417122620640215",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/rochmanindex%40rochman.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

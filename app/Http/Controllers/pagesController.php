@@ -17,125 +17,139 @@ use Newsletter;
 use Session;
 use CMS;
 use Illuminate\Support\Facades\Cache;
+use Google;
+use Google_Service_Indexing;
+use Google_Service_Indexing_UrlNotification;
 
 class pagesController extends Controller
 {
    //home page
-   public function home(){
+   public function home()
+   {
       //   $sliders = slider::where('status',15)->orderby('id','desc')->get();
-      
+
       $cacheDuration = env('CACHE_DURATION', 3600);
       $sliders = Cache::remember('sliders', $cacheDuration, function () {
-         return slider::where('status',15)->orderby('id','desc')->select(['id', 'image', 'caption_one', 'caption_two', 'caption_three'])->get();
+         return slider::where('status', 15)->orderby('id', 'desc')->select(['id', 'image', 'caption_one', 'caption_two', 'caption_three'])->get();
       });
-      
-    //   $blogs = blog::limit(3)->orderby('id','desc')->get();
-      $blogs = Cache::remember('blogs', $cacheDuration, function (){
-         return blog::limit(3)->orderby('id','desc')->select(['thumbnail', 'created_at', 'title', 'url'  ])->get();
-      });
-      
-    //   $page = pages::find(7);
-      $page = Cache::remember('page', $cacheDuration, function(){
-         return pages::select(['meta_description','meta_tags','url','thumbnail','content', 'id'])->find(7);
-      });
-      
-    //   $featured = products::where('feature_alert','!=',"")->orderby('id','desc')->limit(4)->get();
-      $featured = Cache::remember('featured', $cacheDuration, function (){
-         return products::where('feature_alert','!=',"")->orderby('id','desc')->limit(4)->
-         select(['id', 'url', 'product_name', 'price', 'bedrooms', 'bathrooms', 'size', 'feature_alert', 'feature_color'])->get();
-      });
-      
-    //   $lands = product_category::join('product_information','product_information.id','=','product_category_product_information.productID')
-    //                                 ->where('categoryID',4)
-    //                                 ->orderby('product_information.id','desc')
-    //                                 ->get();
 
-      return view('pages.home', compact('sliders','page','blogs','featured',
-    //   'lands'
-      ));
+      //   $blogs = blog::limit(3)->orderby('id','desc')->get();
+      $blogs = Cache::remember('blogs', $cacheDuration, function () {
+         return blog::limit(3)->orderby('id', 'desc')->select(['thumbnail', 'created_at', 'title', 'url'])->get();
+      });
+
+      //   $page = pages::find(7);
+      $page = Cache::remember('page', $cacheDuration, function () {
+         return pages::select(['meta_description', 'meta_tags', 'url', 'thumbnail', 'content', 'id'])->find(7);
+      });
+
+      //   $featured = products::where('feature_alert','!=',"")->orderby('id','desc')->limit(4)->get();
+      $featured = Cache::remember('featured', $cacheDuration, function () {
+         return products::where('feature_alert', '!=', "")->orderby('id', 'desc')->limit(4)->
+            select(['id', 'url', 'product_name', 'price', 'bedrooms', 'bathrooms', 'size', 'feature_alert', 'feature_color'])->get();
+      });
+
+      //   $lands = product_category::join('product_information','product_information.id','=','product_category_product_information.productID')
+      //                                 ->where('categoryID',4)
+      //                                 ->orderby('product_information.id','desc')
+      //                                 ->get();
+
+      return view('pages.home', compact(
+         'sliders',
+         'page',
+         'blogs',
+         'featured',
+         //   'lands'
+      )
+      );
    }
 
-   public function mainpage(Request $request, $main){
-      if($main == 'home'){
+   public function mainpage(Request $request, $main)
+   {
+      if ($main == 'home') {
          return redirect()->route('home.page');
       }
 
-      if($main == 'blog'){
-         $blogs = blog::orderby('id','desc')->get();
-         $page = pages::where('url','blog')->first();
+      if ($main == 'blog') {
+         $blogs = blog::orderby('id', 'desc')->get();
+         $page = pages::where('url', 'blog')->first();
 
-         return view('blog.classic', compact('blogs','page'));
+         return view('blog.classic', compact('blogs', 'page'));
       }
 
-      $page = pages::where('url',$main)->first();
+      $page = pages::where('url', $main)->first();
       $template = template::find($page->template);
 
-      if($page->template == ""){
-         return view('pages.general',compact('page'));
-      }else{
-         return view('pages.'.$template->blade_name, compact('page'));
+      if ($page->template == "") {
+         return view('pages.general', compact('page'));
+      } else {
+         return view('pages.' . $template->blade_name, compact('page'));
       }
 
 
    }
 
-   public function childpage($parent,$url){
-      $page = pages::where('url',$url)->first();
+   public function childpage($parent, $url)
+   {
+      $page = pages::where('url', $url)->first();
       $template = template::find($page->template);
 
-      $parent = pages::where('url',$parent)->first();
+      $parent = pages::where('url', $parent)->first();
 
-      if($page->template == ""){
+      if ($page->template == "") {
          $parent = [];
-         return view('pages.general',compact('page'));
-      }else{
-         return view('pages.'.$template->blade_name, compact('page','parent'));
+         return view('pages.general', compact('page'));
+      } else {
+         return view('pages.' . $template->blade_name, compact('page', 'parent'));
       }
 
    }
 
-   public function blog_details($url){
-      $blog = blog::where('url',$url)->first();
+   public function blog_details($url)
+   {
+      $blog = blog::where('url', $url)->first();
       return view('blog.details', compact('blog'));
    }
 
-   public function blog_category($url){
-      $category = category::where('url',$url)->first();
-      $posts = blog_category::join('blogs','blogs.id','=','blog_category.blog_id')
-                  ->where('blog_category.category_id', $category->id)
-                  ->select('*','blogs.url as blog_url','blogs.created_at as publish_date','blogs.id as pid')
-                  ->paginate(6);
-      return view('pages.blog-category', compact('posts','category'));
+   public function blog_category($url)
+   {
+      $category = category::where('url', $url)->first();
+      $posts = blog_category::join('blogs', 'blogs.id', '=', 'blog_category.blog_id')
+         ->where('blog_category.category_id', $category->id)
+         ->select('*', 'blogs.url as blog_url', 'blogs.created_at as publish_date', 'blogs.id as pid')
+         ->paginate(6);
+      return view('pages.blog-category', compact('posts', 'category'));
    }
 
-   public function view_inquiry(Request $request){
-      $this->validate($request,[
+   public function view_inquiry(Request $request)
+   {
+      $this->validate($request, [
          'names' => 'required',
          'phone_number' => 'required'
       ]);
 
       $inquiry = new inquiry;
-      $inquiry->names         = $request->names;
-      $inquiry->email         = $request->email;
-      $inquiry->phone_number  = $request->phone_number;
-      $inquiry->subject       = $request->subject;
-      $inquiry->property_id   = $request->property_id;
-      $inquiry->view_date     = $request->view_date;
-      $inquiry->view_time     = $request->view_time;
-      $inquiry->message	      = $request->message;
-      $inquiry->type	         = 'Property';
+      $inquiry->names = $request->names;
+      $inquiry->email = $request->email;
+      $inquiry->phone_number = $request->phone_number;
+      $inquiry->subject = $request->subject;
+      $inquiry->property_id = $request->property_id;
+      $inquiry->view_date = $request->view_date;
+      $inquiry->view_time = $request->view_time;
+      $inquiry->message = $request->message;
+      $inquiry->type = 'Property';
       $inquiry->save();
 
       //send email
       // /*======= send email ======*/
       $mail = new PHPMailer(true);
-      $mail->SMTPDebug = 1;                                 // Set mailer to use SMTP
-      $mail->Host = 'smtp.sendgrid.net';                    // Specify main and backup SMTP servers
-      $mail->SMTPAuth = true;                               // Enable SMTP authentication
-      $mail->Username = 'notification@supremepowersystems.com';                          // SMTP username
-      $mail->Password = 'NmV7QH9HBm3J';                     // SMTP password
-      $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-      $mail->Port = 587;                                    // TCP port to connect to
+      $mail->SMTPDebug = 1; // Set mailer to use SMTP
+      $mail->Host = 'smtp.sendgrid.net'; // Specify main and backup SMTP servers
+      $mail->SMTPAuth = true; // Enable SMTP authentication
+      $mail->Username = 'notification@supremepowersystems.com'; // SMTP username
+      $mail->Password = 'NmV7QH9HBm3J'; // SMTP password
+      $mail->SMTPSecure = 'tls'; // Enable TLS encryption, `ssl` also accepted
+      $mail->Port = 587; // TCP port to connect to
 
       //Recipients
       //$mail->setFrom('sales@rochman-properties.co.ke', 'Rochman Properties');
@@ -143,7 +157,7 @@ class pagesController extends Controller
       // Add
 
       // //Content
-      $mail->isHTML(true);                                  // Set email format to HTML
+      $mail->isHTML(true); // Set email format to HTML
       $mail->Subject = $request->subject;
 
       $mail->addAddress('sales@rochman-properties.co.ke');
@@ -153,19 +167,20 @@ class pagesController extends Controller
       // Compose a simple HTML email message
       $message = '<html><body>';
       $message .= '<h3 style="color:#333;">Property Viewing Request</h3>';
-      $message .= '<p style="color:#333;font-size:14px;"><b>Name :</b>'. $request->names.'<br><b>Email :</b>'.$request->email.'<br><b>Phone Number :</b>'.$request->phone_number.'<br><b>Property :</b>'.$property->product_name.'<br><b>View Date :</b>'.$request->view_date.'<br><b>View Time :</b>'.$request->view_time.'<br><b>Message</b><br>'.$request->message.'</p>';
+      $message .= '<p style="color:#333;font-size:14px;"><b>Name :</b>' . $request->names . '<br><b>Email :</b>' . $request->email . '<br><b>Phone Number :</b>' . $request->phone_number . '<br><b>Property :</b>' . $property->product_name . '<br><b>View Date :</b>' . $request->view_date . '<br><b>View Time :</b>' . $request->view_time . '<br><b>Message</b><br>' . $request->message . '</p>';
       $message .= '</body></html>';
-      $mail->Body  = $message;
+      $mail->Body = $message;
       $mail->send();
 
 
-      Session::flash('success','Thank you for contacting us');
+      Session::flash('success', 'Thank you for contacting us');
 
       return redirect()->back();
    }
 
-   public function inquiry(Request $request){
-      $this->validate($request,[
+   public function inquiry(Request $request)
+   {
+      $this->validate($request, [
          'name' => 'required',
          'email' => 'required',
          'message' => 'required',
@@ -183,13 +198,13 @@ class pagesController extends Controller
       //send email
       // /*======= send email ======*/
       $mail = new PHPMailer(true);
-      $mail->SMTPDebug = 1;                                 // Set mailer to use SMTP
-      $mail->Host = 'smtp.sendgrid.net';                    // Specify main and backup SMTP servers
-      $mail->SMTPAuth = true;                               // Enable SMTP authentication
-      $mail->Username = 'notification@supremepowersystems.com';                          // SMTP username
-      $mail->Password = 'NmV7QH9HBm3J';                     // SMTP password
-      $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-      $mail->Port = 587;                                    // TCP port to connect to
+      $mail->SMTPDebug = 1; // Set mailer to use SMTP
+      $mail->Host = 'smtp.sendgrid.net'; // Specify main and backup SMTP servers
+      $mail->SMTPAuth = true; // Enable SMTP authentication
+      $mail->Username = 'notification@supremepowersystems.com'; // SMTP username
+      $mail->Password = 'NmV7QH9HBm3J'; // SMTP password
+      $mail->SMTPSecure = 'tls'; // Enable TLS encryption, `ssl` also accepted
+      $mail->Port = 587; // TCP port to connect to
 
       //Recipients
       //$mail->setFrom('sales@rochman-properties.co.ke', 'Rochman Properties');
@@ -197,7 +212,7 @@ class pagesController extends Controller
       // Add
 
       // //Content
-      $mail->isHTML(true);                                  // Set email format to HTML
+      $mail->isHTML(true); // Set email format to HTML
       $mail->Subject = 'Inquiry';
 
       $mail->addAddress('sales@rochman-properties.co.ke');
@@ -206,32 +221,73 @@ class pagesController extends Controller
       // Compose a simple HTML email message
       $message = '<html><body>';
       $message .= '<h3 style="color:#333;">Inquiry</h3>';
-      $message .= '<p><b>Full Names:</b>'.$request->name.'<br><b>Email:</b>'.$request->email.'<br></p><h4>Inquiry</h4><p>'.$request->message.'</p><p>Phone Number:'.$request->phone_number.'</p>';
+      $message .= '<p><b>Full Names:</b>' . $request->name . '<br><b>Email:</b>' . $request->email . '<br></p><h4>Inquiry</h4><p>' . $request->message . '</p><p>Phone Number:' . $request->phone_number . '</p>';
       $message .= '</body></html>';
-      $mail->Body  = $message;
+      $mail->Body = $message;
       $mail->send();
 
-      Session::flash('success','Inquiry successfully sent.');
+      Session::flash('success', 'Inquiry successfully sent.');
 
       return redirect()->back();
 
    }
 
-   public function subscription(Request $request){
-      $this->validate($request,[
-         'email'      => 'required',
+   public function subscription(Request $request)
+   {
+      $this->validate($request, [
+         'email' => 'required',
          'first_name' => 'required',
-         'last_name'  => 'required',
-         'phone_number'  => 'required',
+         'last_name' => 'required',
+         'phone_number' => 'required',
       ]);
 
-      if(!Newsletter::isSubscribed($request->email) ) {
+      if (!Newsletter::isSubscribed($request->email)) {
          Newsletter::subscribe($request->email);
-         Newsletter::subscribe($request->email, ['FNAME'=>$request->first_name,'LNAME'=>$request->last_name,'EMAIL'=>$request->email,'PHONE'=>$request->phone_number]);
+         Newsletter::subscribe($request->email, ['FNAME' => $request->first_name, 'LNAME' => $request->last_name, 'EMAIL' => $request->email, 'PHONE' => $request->phone_number]);
       }
 
-      Session::flash('success','Thank for subscribing');
+      Session::flash('success', 'Thank for subscribing');
 
       return redirect()->back();
+   }
+
+   public function indexPages()
+   {
+      // return dd('hey');
+      try {
+         $googleClient = new Google\Client();
+
+         // Add here location to the JSON key file that you created and downloaded earlier.
+         $url = public_path('rochman-03a7c8714134.json');
+         // return dd($url);
+         $googleClient->setAuthConfig($url);
+         $googleClient->setScopes(Google_Service_Indexing::INDEXING);
+         $googleIndexingService = new Google_Service_Indexing($googleClient);
+
+         // Use URL_UPDATED for new or updated pages.
+         // Use URL_DELETED for deleted pages.
+         $urlNotification = new Google_Service_Indexing_UrlNotification([
+            'url' => "https://rochman-properties.co.ke",
+            'type' => 'URL_UPDATED'
+         ]);
+
+         $result = json_encode($googleIndexingService->urlNotifications->publish($urlNotification));
+
+         return response()->json($result);
+
+         return $result;
+
+         /*
+           Because we are using try-catch there is no real need for checking the result in the 
+           try -block. But if you want to access the values that Google returns, below are 
+           the examples.
+
+           $result->urlNotificationMetadata->latestUpdate["notifyTime"]; // Notification time.
+           $result->urlNotificationMetadata->latestUpdate["type"]; // Notification type.
+           $result->urlNotificationMetadata->latestUpdate["url"]; // Url that you submitted.
+         */
+      } catch (\Exception $e) {
+         echo 'Caught exception: ', $e->getMessage(), "\n";
+      }
    }
 }
