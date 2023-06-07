@@ -141,9 +141,23 @@
       gtag('js', new Date());
     
       gtag('config', 'UA-169432296-1');
+    //   ads
+      gtag('config', 'AW-11124891189');
     </script>
     
     <!-- Google Analytics Code End -->
+    
+    <!--G4A Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HV4ME0KVNV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-HV4ME0KVNV');
+    //   ads
+      gtag('config', 'AW-11124891189');
+    </script>
     
     </head>
 
