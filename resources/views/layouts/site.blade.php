@@ -4,6 +4,11 @@
 @include('partials._head')
 
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TQJML98" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     @include('partials._header')
     @yield('content')
     @if (request()->route()->getName() != 'properties.list')
@@ -60,8 +65,7 @@
             <img src="/assets/images/whatsapp.png" alt="">
         </div>
     </a>
-    <button data-toggle="modal" data-target="#bookingModal"
-        class="backto-top-left" id="myBtn">
+    <button data-toggle="modal" data-target="#bookingModal" class="backto-top-left" id="myBtn">
         <div>
             <img src="/assets/images/chat.png" alt="">
         </div>
@@ -81,32 +85,40 @@
                         <div class="card-body bg-grey">
                             <h3 class="widget-subtitle">Book a Viewing</h3>
                             <p>For more information and free viewing, submit your contact details below.</p>
-                            <form class="contact-box rt-contact-form" method="POST" action="http://localhost:8000/property/view/inquiry">
+                            <form class="contact-box rt-contact-form" method="POST"
+                                action="http://localhost:8000/property/view/inquiry">
                                 <input type="hidden" value="6" name="property_id" required="">
-                                <input type="hidden" value="5 Bedroom Maisonette in Thome Estate Viewing inquiry" name="subject" required="">
-                                <input type="hidden" name="_token" value="jloulScLD55yS0hLxTjcillBfQeqwFPf3lIOOtbd">                                <div class="row">
+                                <input type="hidden" value="5 Bedroom Maisonette in Thome Estate Viewing inquiry"
+                                    name="subject" required="">
+                                <input type="hidden" name="_token" value="jloulScLD55yS0hLxTjcillBfQeqwFPf3lIOOtbd">
+                                <div class="row">
                                     <div class="form-group col-lg-12">
                                         <label for="">Your Names <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="names" placeholder="Names" required="">
+                                        <input type="text" class="form-control" name="names" placeholder="Names"
+                                            required="">
                                     </div>
 
                                     <div class="form-group col-lg-12">
-                                        <label for="">Your Phone number<span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" name="phone_number" placeholder="Phone number" required="">
+                                        <label for="">Your Phone number<span
+                                                class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" name="phone_number"
+                                            placeholder="Phone number" required="">
                                     </div>
 
                                     <div class="form-group col-lg-12">
                                         <label for="">Your Email </label>
-                                        <input type="email" class="form-control" name="email" placeholder="Email address">
+                                        <input type="email" class="form-control" name="email"
+                                            placeholder="Email address">
                                     </div>
 
-                                    
 
-                                    
+
+
 
                                     <div class="form-group col-lg-12">
                                         <label for="">Message </label>
-                                        <textarea name="message" class="form-control" cols="30" rows="4" placeholder="I'm interested in Land/Apartments.." data-gramm="false" wt-ignore-input="true"></textarea>
+                                        <textarea name="message" class="form-control" cols="30" rows="4"
+                                            placeholder="I'm interested in Land/Apartments.." data-gramm="false" wt-ignore-input="true"></textarea>
                                     </div>
                                     <div class="form-group col-lg-12">
                                         <div class="advanced-button">
@@ -127,7 +139,7 @@
         </div>
     </div>
 
-  
+
 
 
     <!-- Back to top end -->
